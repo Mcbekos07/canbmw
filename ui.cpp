@@ -14,6 +14,14 @@ bool uiHandleButton(AppState& state, ButtonEvent event, uint32_t nowMs) {
 
   switch (state.view) {
     case config::VIEW_BOOT:
+    case config::VIEW_STARTUP_OK:
+      return false;
+
+    case config::VIEW_ERROR:
+      if (event == BTN_EVENT_BACK && !state.mcpError) {
+        state.view = config::VIEW_MAIN_MENU;
+        return true;
+      }
       return false;
 
     case config::VIEW_MAIN_MENU:
@@ -91,6 +99,16 @@ bool uiHandleButton(AppState& state, ButtonEvent event, uint32_t nowMs) {
 
 void uiTick(AppState& state, uint32_t nowMs) {
   if (state.view == config::VIEW_BOOT && (nowMs - state.bootStartMs) >= config::BOOT_SCREEN_MS) {
+    if (state.mcpError) {
+      state.view = config::VIEW_ERROR;
+    } else {
+      state.view = config::VIEW_STARTUP_OK;
+      state.startupOkStartMs = nowMs;
+    }
+  }
+
+  if (state.view == config::VIEW_STARTUP_OK &&
+      (nowMs - state.startupOkStartMs) >= config::STARTUP_OK_MS) {
     state.view = config::VIEW_MAIN_MENU;
   }
 }

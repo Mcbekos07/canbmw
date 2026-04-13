@@ -95,12 +95,13 @@ void setup() {
   gState.buttonsReady = true;
   Serial.println(F("[SYS] Buttons init OK"));
 
-  gState.canReady = true;
+  gState.canReady = canProbe(gCan);
+  gState.mcpError = !gState.canReady;
 
   gState.bootShown = true;
   displayMarkDirty(gDisplay);
 
-  if (gState.displayReady && gState.buttonsReady) {
+  if (gState.displayReady && gState.buttonsReady && gState.canReady) {
     Serial.println(F("[SYS] Modules initialized"));
   } else {
     Serial.println(F("[SYS] Init finished with warnings"));
@@ -126,6 +127,7 @@ void loop() {
     const config::SnifferSpeed speed = static_cast<config::SnifferSpeed>(gState.snifferSpeedIndex);
 
     if (canInitSniffer(gCan, speed)) {
+      gState.mcpError = false;
       gState.view = config::VIEW_SNIFFER_RUN;
       gState.lastCanPollMs = 0;
       gState.snifferFrameCount = 0;
@@ -134,6 +136,8 @@ void loop() {
       Serial.print(F("[UI] Sniffer start at "));
       Serial.println(canSpeedLabel(speed));
     } else {
+      gState.mcpError = true;
+      gState.view = config::VIEW_ERROR;
       Serial.println(F("[UI] Sniffer start failed"));
     }
     displayMarkDirty(gDisplay);
@@ -153,6 +157,7 @@ void loop() {
     if (profileCount > 0) {
       const MasterProfile& p = profiles[gState.masterProfileIndex % profileCount];
       if (canInitMaster(gCan, p.speed)) {
+        gState.mcpError = false;
         gState.view = config::VIEW_MASTER_RUN;
         gState.masterTxCount = 0;
         gState.masterLastTxId = 0;
@@ -162,6 +167,8 @@ void loop() {
         Serial.print(F("[UI] Master start: "));
         Serial.println(reinterpret_cast<const __FlashStringHelper*>(p.name));
       } else {
+        gState.mcpError = true;
+        gState.view = config::VIEW_ERROR;
         Serial.println(F("[UI] Master start failed"));
       }
     }

@@ -17,7 +17,9 @@ struct AppState {
   bool requestSnifferStop;
   bool requestMasterStart;
   bool requestMasterStop;
+  bool mcpError;
   uint32_t bootStartMs;
+  uint32_t startupOkStartMs;
   uint32_t lastCanPollMs;
   uint32_t snifferFrameCount;
   uint32_t lastCanId;

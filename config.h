@@ -19,12 +19,15 @@ static const uint16_t OLED_HEIGHT = 64;
 
 static const uint32_t SERIAL_BAUD = 115200UL;
 static const uint16_t BOOT_SCREEN_MS = 1200;
+static const uint16_t STARTUP_OK_MS = 1000;
 static const uint16_t BUTTON_DEBOUNCE_MS = 25;
 static const uint16_t DISPLAY_REFRESH_MS = 33;
 static const uint16_t CAN_POLL_MS = 2;
 
 enum View : uint8_t {
   VIEW_BOOT = 0,
+  VIEW_STARTUP_OK,
+  VIEW_ERROR,
   VIEW_MAIN_MENU,
   VIEW_SNIFFER_SPEED,
   VIEW_SNIFFER_RUN,

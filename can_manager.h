@@ -22,6 +22,7 @@ struct CanManager {
 
 bool canInitSniffer(CanManager& can, config::SnifferSpeed speed);
 bool canInitMaster(CanManager& can, config::SnifferSpeed speed);
+bool canProbe(CanManager& can);
 void canStop(CanManager& can);
 bool canPoll(CanManager& can, uint32_t nowMs, uint32_t& lastPollMs, CanFrame& outFrame);
 bool canSend(CanManager& can, const CanFrame& frame);

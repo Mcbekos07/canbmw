@@ -13,7 +13,9 @@ void appStateInit(AppState& state, uint32_t nowMs) {
   state.requestSnifferStop = false;
   state.requestMasterStart = false;
   state.requestMasterStop = false;
+  state.mcpError = false;
   state.bootStartMs = nowMs;
+  state.startupOkStartMs = 0;
   state.lastCanPollMs = 0;
   state.snifferFrameCount = 0;
   state.lastCanId = 0;

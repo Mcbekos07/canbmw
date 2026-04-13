@@ -9,10 +9,10 @@ Display::Display()
 
 static void drawMainMenu(Adafruit_SSD1306& oled, uint8_t selected) {
   oled.setCursor(0, 0);
-  oled.print(F("Main menu"));
+  oled.print(F("Главное меню"));
 
   oled.setCursor(0, 18);
-  oled.print(selected == config::MENU_SNIFFER ? F("> Sniffer") : F("  Sniffer"));
+  oled.print(selected == config::MENU_SNIFFER ? F("> Снифер") : F("  Снифер"));
 
   oled.setCursor(0, 34);
   oled.print(selected == config::MENU_MASTER ? F("> Master") : F("  Master"));
@@ -23,7 +23,7 @@ static void drawMainMenu(Adafruit_SSD1306& oled, uint8_t selected) {
 
 static void drawSnifferSpeed(Adafruit_SSD1306& oled, uint8_t selected) {
   oled.setCursor(0, 0);
-  oled.print(F("Sniffer speed"));
+  oled.print(F("Скорость CAN"));
 
   oled.setCursor(0, 16);
   oled.print(selected == config::SNIFFER_SPEED_125 ? F("> 125 kbps") : F("  125 kbps"));
@@ -35,7 +35,7 @@ static void drawSnifferSpeed(Adafruit_SSD1306& oled, uint8_t selected) {
   oled.print(selected == config::SNIFFER_SPEED_500 ? F("> 500 kbps") : F("  500 kbps"));
 
   oled.setCursor(0, 56);
-  oled.print(F("SEL=start BACK"));
+  oled.print(F("SEL=Пуск BACK"));
 }
 
 static char toHex(uint8_t v) {
@@ -49,7 +49,7 @@ static void byteToHex(uint8_t value, char* out2) {
 
 static void drawSnifferRun(Adafruit_SSD1306& oled, const AppState& state) {
   oled.setCursor(0, 0);
-  oled.print(F("Sniffer "));
+  oled.print(F("Снифер "));
   oled.print(canSpeedLabel(static_cast<config::SnifferSpeed>(state.snifferSpeedIndex)));
 
   oled.setCursor(0, 12);
@@ -78,7 +78,7 @@ static void drawSnifferRun(Adafruit_SSD1306& oled, const AppState& state) {
   }
 
   oled.setCursor(0, 56);
-  oled.print(F("BACK=speed"));
+  oled.print(F("BACK=скорость"));
 }
 
 static void drawMasterList(Adafruit_SSD1306& oled, uint8_t selected) {
@@ -86,12 +86,12 @@ static void drawMasterList(Adafruit_SSD1306& oled, uint8_t selected) {
   const MasterProfile* profiles = masterGetProfiles(count);
   if (count == 0) {
     oled.setCursor(0, 0);
-    oled.print(F("No profiles"));
+    oled.print(F("Нет профилей"));
     return;
   }
 
   oled.setCursor(0, 0);
-  oled.print(F("Master profiles"));
+  oled.print(F("Профили Master"));
 
   for (uint8_t row = 0; row < 3; ++row) {
     const uint8_t idx = (selected + row) % count;
@@ -101,7 +101,7 @@ static void drawMasterList(Adafruit_SSD1306& oled, uint8_t selected) {
   }
 
   oled.setCursor(0, 56);
-  oled.print(F("SEL=start BACK"));
+  oled.print(F("SEL=Пуск BACK"));
 }
 
 static void drawMasterRun(Adafruit_SSD1306& oled, const AppState& state) {
@@ -109,7 +109,7 @@ static void drawMasterRun(Adafruit_SSD1306& oled, const AppState& state) {
   const MasterProfile* profiles = masterGetProfiles(count);
   if (count == 0) {
     oled.setCursor(0, 0);
-    oled.print(F("No profile"));
+    oled.print(F("Нет профиля"));
     return;
   }
   const MasterProfile& p = profiles[state.masterProfileIndex % count];
@@ -170,11 +170,27 @@ void displayUpdate(Display& display, const AppState& state, uint32_t nowMs) {
 
   switch (state.view) {
     case config::VIEW_BOOT:
-      display.oled.print(F("CAN Console"));
+      display.oled.print(F("FeRgAnI Studio"));
       display.oled.setCursor(0, 20);
-      display.oled.print(F("Init modules..."));
+      display.oled.print(F("CAN BMW Tool"));
       display.oled.setCursor(0, 40);
-      display.oled.print(F("Ready"));
+      display.oled.print(F("Инициализация..."));
+      break;
+
+    case config::VIEW_STARTUP_OK:
+      display.oled.print(F("FeRgAnI Studio"));
+      display.oled.setCursor(0, 24);
+      display.oled.print(F("Модуль готов"));
+      break;
+
+    case config::VIEW_ERROR:
+      display.oled.print(F("FeRgAnI Studio"));
+      display.oled.setCursor(0, 18);
+      display.oled.print(F("Ошибка MCP2515"));
+      display.oled.setCursor(0, 34);
+      display.oled.print(F("Проверьте CAN модуль"));
+      display.oled.setCursor(0, 54);
+      display.oled.print(F("Перезапуск устройства"));
       break;
 
     case config::VIEW_MAIN_MENU:

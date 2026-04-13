@@ -54,6 +54,21 @@ bool canInitMaster(CanManager& can, config::SnifferSpeed speed) {
   return canInit(can, speed, MCP_NORMAL, F("master"));
 }
 
+bool canProbe(CanManager& can) {
+  pinMode(config::CAN_INT_PIN, INPUT);
+  const uint8_t initResult = can.controller.begin(MCP_ANY, CAN_500KBPS, MCP_8MHZ);
+  if (initResult != CAN_OK) {
+    Serial.print(F("[CAN] probe fail, code="));
+    Serial.println(initResult);
+    can.ready = false;
+    return false;
+  }
+  can.controller.setMode(MCP_SLEEP);
+  can.ready = false;
+  Serial.println(F("[CAN] probe OK"));
+  return true;
+}
+
 void canStop(CanManager& can) {
   can.controller.setMode(MCP_SLEEP);
   can.ready = false;
