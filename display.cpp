@@ -15,15 +15,15 @@ static void drawTitle(Adafruit_SSD1306& oled, const __FlashStringHelper* text) {
 }
 
 static void drawMainMenu(Adafruit_SSD1306& oled, uint8_t selected) {
-  drawTitle(oled, F("МЕНЮ"));
+  drawTitle(oled, F("MENU"));
 
   oled.setCursor(0, 26);
-  oled.print(selected == config::MENU_SNIFFER ? F("> Снифер") : F("  Снифер"));
+  oled.print(selected == config::MENU_SNIFFER ? F("> Snifer") : F("  Snifer"));
   oled.setCursor(0, 42);
-  oled.print(selected == config::MENU_MASTER ? F("> Мастер") : F("  Мастер"));
+  oled.print(selected == config::MENU_MASTER ? F("> Master") : F("  Master"));
 
   oled.setCursor(0, 56);
-  oled.print(F("UP/DN выбор  SEL"));
+  oled.print(F("UP/DN  SEL"));
 }
 
 static const __FlashStringHelper* speedNameRu(config::SnifferSpeed speed) {
@@ -37,7 +37,7 @@ static const __FlashStringHelper* speedNameRu(config::SnifferSpeed speed) {
 }
 
 static void drawSnifferSpeed(Adafruit_SSD1306& oled, uint8_t selected) {
-  drawTitle(oled, F("СКОРОСТЬ"));
+  drawTitle(oled, F("SKOROST"));
 
   oled.setCursor(0, 30);
   oled.setTextSize(2);
@@ -45,18 +45,18 @@ static void drawSnifferSpeed(Adafruit_SSD1306& oled, uint8_t selected) {
   oled.setTextSize(1);
 
   oled.setCursor(0, 56);
-  oled.print(F("UP/DN  SEL=Пуск"));
+  oled.print(F("UP/DN SEL=Pusk"));
 }
 
 static void drawSnifferRun(Adafruit_SSD1306& oled, const AppState& state) {
-  drawTitle(oled, F("СНИФЕР"));
+  drawTitle(oled, F("SNIFER"));
 
   oled.setCursor(0, 22);
-  oled.print(F("Скор: "));
+  oled.print(F("Skor: "));
   oled.print(speedNameRu(static_cast<config::SnifferSpeed>(state.snifferSpeedIndex)));
 
   oled.setCursor(0, 34);
-  oled.print(F("Кадры: "));
+  oled.print(F("Kadry: "));
   oled.print(state.snifferFrameCount);
 
   oled.setCursor(0, 46);
@@ -64,37 +64,37 @@ static void drawSnifferRun(Adafruit_SSD1306& oled, const AppState& state) {
   oled.print(state.lastCanId, HEX);
 
   oled.setCursor(0, 56);
-  oled.print(F("BACK=Назад"));
+  oled.print(F("BACK=Nazad"));
 }
 
 static void drawMasterList(Adafruit_SSD1306& oled, uint8_t selected) {
   uint8_t count = 0;
   const MasterProfile* profiles = masterGetProfiles(count);
-  drawTitle(oled, F("МАСТЕР"));
+  drawTitle(oled, F("MASTER"));
 
   if (count == 0) {
     oled.setCursor(0, 32);
-    oled.print(F("Нет профилей"));
+    oled.print(F("Net profiley"));
     return;
   }
 
   oled.setCursor(0, 24);
-  oled.print(F("Профиль:"));
+  oled.print(F("Profil:"));
   oled.setCursor(0, 38);
   oled.print(reinterpret_cast<const __FlashStringHelper*>(profiles[selected % count].name));
 
   oled.setCursor(0, 56);
-  oled.print(F("UP/DN  SEL=Пуск"));
+  oled.print(F("UP/DN SEL=Pusk"));
 }
 
 static void drawMasterRun(Adafruit_SSD1306& oled, const AppState& state) {
   uint8_t count = 0;
   const MasterProfile* profiles = masterGetProfiles(count);
-  drawTitle(oled, F("МАСТЕР"));
+  drawTitle(oled, F("MASTER"));
 
   if (count == 0) {
     oled.setCursor(0, 32);
-    oled.print(F("Нет профиля"));
+    oled.print(F("Net profilya"));
     return;
   }
 
@@ -104,7 +104,7 @@ static void drawMasterRun(Adafruit_SSD1306& oled, const AppState& state) {
   oled.print(reinterpret_cast<const __FlashStringHelper*>(p.name));
 
   oled.setCursor(0, 34);
-  oled.print(F("Скор: "));
+  oled.print(F("Skor: "));
   oled.print(speedNameRu(p.speed));
 
   oled.setCursor(0, 46);
@@ -114,7 +114,7 @@ static void drawMasterRun(Adafruit_SSD1306& oled, const AppState& state) {
   oled.print(state.masterLastTxId, HEX);
 
   oled.setCursor(0, 56);
-  oled.print(F("BACK=Стоп"));
+  oled.print(F("BACK=Stop"));
 }
 
 bool displayInit(Display& display) {
@@ -156,7 +156,7 @@ void displayUpdate(Display& display, const AppState& state, uint32_t nowMs) {
       display.oled.setCursor(0, 20);
       display.oled.print(F("CAN BMW Tool"));
       display.oled.setCursor(0, 40);
-      display.oled.print(F("Запуск..."));
+      display.oled.print(F("Zapusk..."));
       break;
 
     case config::VIEW_STARTUP_OK:
@@ -164,10 +164,10 @@ void displayUpdate(Display& display, const AppState& state, uint32_t nowMs) {
       display.oled.print(F("FeRgAnI Studio"));
       display.oled.setCursor(0, 26);
       display.oled.setTextSize(2);
-      display.oled.print(F("Готов"));
+      display.oled.print(F("GOTOV"));
       display.oled.setTextSize(1);
       display.oled.setCursor(0, 52);
-      display.oled.print(F("Модуль готов"));
+      display.oled.print(F("Modul gotov"));
       break;
 
     case config::VIEW_ERROR:
@@ -175,10 +175,10 @@ void displayUpdate(Display& display, const AppState& state, uint32_t nowMs) {
       display.oled.print(F("FeRgAnI Studio"));
       display.oled.setCursor(0, 20);
       display.oled.setTextSize(2);
-      display.oled.print(F("Ошибка CAN"));
+      display.oled.print(F("CAN ERROR"));
       display.oled.setTextSize(1);
       display.oled.setCursor(0, 52);
-      display.oled.print(F("Проверьте модуль"));
+      display.oled.print(F("Proverte modul"));
       break;
 
     case config::VIEW_MAIN_MENU:
